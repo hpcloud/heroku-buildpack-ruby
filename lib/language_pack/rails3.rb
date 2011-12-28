@@ -35,6 +35,7 @@ private
 
   # runs the tasks for the Rails 3.1 asset pipeline
   def run_assets_precompile_rake_task
+    topic("DETECT: #{run("env PATH=$PATH bundle exec rake assets:precompile --dry-run")}")
     log("assets_precompile") do
       if rake_task_defined?("assets:precompile")
         topic("Preparing app for Rails asset pipeline")
