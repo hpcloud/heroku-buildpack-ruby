@@ -38,6 +38,7 @@ private
     log("assets_precompile") do
       setup_database_url_env
 
+      topic("DATABASE_URL: #{ENV["DATABASE_URL"]}")
       topic("DETECT: #{run("env PATH=$PATH bundle exec rake assets:precompile --dry-run")}")
       if rake_task_defined?("assets:precompile")
         topic("Preparing app for Rails asset pipeline")
