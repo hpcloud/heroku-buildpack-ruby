@@ -67,7 +67,19 @@ private
   # the base PATH environment variable to be used
   # @return [String] the resulting PATH
   def default_path
-    "bin:#{slug_vendor_base}/bin:/usr/local/bin:/usr/bin:/bin"
+    "#{app_bin_path}:#{default_system_path}"
+  end
+
+  # the PATH to the app specific bins
+  # @return [String] the resulting PATH
+  def app_bin_path
+    "bin:#{slug_vendor_base}/bin"
+  end
+
+  # the PATH to the assumed system bins
+  # @return [String] the resulting PATH
+  def default_system_path
+    "/usr/local/bin:/usr/bin:/bin"
   end
 
   # the relative path to the bundler directory of gems
