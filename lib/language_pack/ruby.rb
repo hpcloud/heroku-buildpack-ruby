@@ -134,7 +134,7 @@ private
       ENV[key] ||= value
     end
     ENV["GEM_HOME"] = slug_vendor_base
-    ENV["PATH"]     = "#{ruby_install_binstub_path}:#{default_config_vars["PATH"]}:#{@original_path}"
+    ENV["PATH"]     = "#{ruby_install_binstub_path}:#{app_bin_path}:#{@original_path}:#{default_system_path}"
   end
 
   # install the vendored ruby
