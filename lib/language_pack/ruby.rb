@@ -18,6 +18,12 @@ class LanguagePack::Ruby < LanguagePack::Base
     File.exist?("Gemfile")
   end
 
+  # we should save the original path
+  def initialize(build_path, cache_path=nil)
+    super(build_path, cache_path)
+    @original_path = ENV["PATH"]
+  end
+
   def name
     "Ruby"
   end
@@ -116,7 +122,7 @@ private
       ENV[key] ||= value
     end
     ENV["GEM_HOME"] = slug_vendor_base
-    ENV["PATH"]     = "#{ruby_install_binstub_path}:#{default_config_vars["PATH"]}"
+    ENV["PATH"]     = "#{ruby_install_binstub_path}:#{default_config_vars["PATH"]}:#{@original_path}"
   end
 
   # install the vendored ruby
