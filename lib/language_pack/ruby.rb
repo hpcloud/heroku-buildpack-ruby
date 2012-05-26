@@ -9,7 +9,7 @@ class LanguagePack::Ruby < LanguagePack::Base
   LIBYAML_PATH        = "libyaml-#{LIBYAML_VERSION}"
   BUNDLER_VERSION     = "1.2.0.pre"
   BUNDLER_GEM_PATH    = "bundler-#{BUNDLER_VERSION}"
-  NODE_VERSION        = "0.4.7"
+  NODE_VERSION        = "0.6.13"
   NODE_JS_BINARY_PATH = "node-#{NODE_VERSION}"
 
   # detects if this is a valid Ruby app
