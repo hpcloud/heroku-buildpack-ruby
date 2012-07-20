@@ -61,8 +61,19 @@ private
             puts "http://devcenter.heroku.com/articles/rails31_heroku_cedar#troubleshooting"
           end
         end
+      else
+        if asset_pipeline_rails?
+          puts " ! Error running/detecting assets:precompiling task. Rerunning with --trace"
+          pipe("env PATH=$PATH:bin bundle exec rake assets:precompile --trace 2>&1")
+        end
       end
     end
+  end
+
+  # detects if the rails we're using has the asset pipeline
+  # @return [Bundler::LazySpecification] the matching gempsec for rails if true and nil if it isn't compatible
+  def asset_pipeline_rails?
+    lockfile_parser.specs.detect {|spec| spec.name == "rails" && spec.version >= Gem::Version.new("3.1.0") }
   end
 
   # setup the database url as an environment variable
