@@ -196,7 +196,7 @@ private
   # determines if a build ruby is required
   # @return [Boolean] true if a build ruby is required
   def build_ruby?
-    @build_ruby ||= !ruby_version_jruby? && ruby_version != "ruby-1.9.3"
+    @build_ruby ||= !ruby_version_rbx? && !ruby_version_jruby? && ruby_version != "ruby-1.9.3"
   end
 
   # install the vendored ruby
