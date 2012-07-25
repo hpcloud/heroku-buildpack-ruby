@@ -353,6 +353,13 @@ ERROR
   # runs bundler to install the dependencies
   def build_bundler
     log("bundle") do
+      # need to clean up symlinks for rbx
+      if ruby_version_rbx?
+        FileUtils.rm("bin/rake")
+        FileUtils.rm("bin/rdoc")
+        FileUtils.rm("bin/ri")
+      end
+
       bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test"
       bundle_command = "bundle install --without #{bundle_without} --path vendor/bundle --binstubs bin/"
 
