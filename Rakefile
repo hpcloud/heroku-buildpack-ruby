@@ -74,10 +74,9 @@ def build_rbx_command(name, output, prefix, usr_dir, tmpdir, ruby_version)
     # need to move libyaml/libffi to dirs we can see
     "mv usr /tmp",
     "ls /tmp/#{usr_dir}",
-    "./configure --prefix #{prefix} --enable-version=#{ruby_version} --default-version=#{ruby_version} --with-include-dir=/tmp/#{usr_dir}/include --with-lib-dir=/tmp/#{usr_dir}/lib",
+    "./configure --prefix #{prefix} --preserve-prefix --enable-version=#{ruby_version} --default-version=#{ruby_version} --with-include-dir=/tmp/#{usr_dir}/include --with-lib-dir=/tmp/#{usr_dir}/lib",
     "rake install"
   ]
-  # build_command << "mv #{prefix} /app/vendor/#{name}" if name != output
   build_command = build_command.join(" && ")
 
   sh "vulcan build -v -o #{output}.tgz --source #{name} --prefix #{prefix} --command=\"#{build_command}\""
@@ -206,12 +205,19 @@ task "rbx:install", :version do |t, args|
 end
 
 desc "install rbx 2.0.0dev"
-task "rbx2dev:install", :version, :ruby_version do |t, args|
+task "rbx2dev:install", :version, :ruby_version, :date do |t, args|
   version      = args[:version]
   ruby_version = args[:ruby_version]
-  source       = "rubinius-#{version}"
+  date         = args[:date]
+
+  if ruby_version == "19"
+    ruby_version_name = "1.9.3"
+  else
+    ruby_version_name = "1.8.7"
+  end
+  source       = "rubinius-#{version}-#{date}"
   name         = "rubinius-2.0.0dev"
-  output       = "rbx-#{version}-#{ruby_version}"
+  output       = "ruby-#{ruby_version_name}-rbx-#{version}"
   usr_dir      = "usr"
 
   Dir.mktmpdir("rbx-") do |tmpdir|
@@ -226,11 +232,6 @@ task "rbx2dev:install", :version, :ruby_version do |t, args|
       end
 
       prefix = "/app/vendor/#{output}"
-      build_rbx_command(name, output, prefix, usr_dir, tmpdir, ruby_version)
-
-      # rbx build
-      prefix  = "/tmp/#{output}"
-      output  = "rbx-build-#{version}-#{ruby_version}"
       build_rbx_command(name, output, prefix, usr_dir, tmpdir, ruby_version)
     end
   end
