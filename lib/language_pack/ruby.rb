@@ -25,7 +25,7 @@ class LanguagePack::Ruby < LanguagePack::Base
   end
 
   def default_addons
-    add_shared_database_addon
+    []
   end
 
   def default_config_vars
