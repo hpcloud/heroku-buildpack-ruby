@@ -12,21 +12,6 @@ def s3_upload(tmpdir, name)
   sh("#{s3_tools_dir}/s3 put #{S3_BUCKET_NAME} #{name}.tgz #{tmpdir}/#{name}.tgz")
 end
 
-def vendor_plugin(git_url, branch = nil)
-  name = File.basename(git_url, File.extname(git_url))
-  Dir.mktmpdir("#{name}-") do |tmpdir|
-    FileUtils.rm_rf("#{tmpdir}/*")
-
-    Dir.chdir(tmpdir) do
-      sh "git clone #{git_url} ."
-      sh "git checkout origin/#{branch}" if branch
-      FileUtils.rm_rf("#{name}/.git")
-      sh("tar czvf #{tmpdir}/#{name}.tgz *")
-      s3_upload(tmpdir, name)
-    end
-  end
-end
-
 def in_gem_env(gem_home, &block)
   old_gem_home = ENV['GEM_HOME']
   old_gem_path = ENV['GEM_PATH']
@@ -82,13 +67,6 @@ def build_rbx_command(name, output, prefix, usr_dir, tmpdir, ruby_version)
 
   sh "vulcan build -v -o #{output}.tgz --source #{name} --prefix #{prefix} --command=\"#{build_command}\""
   s3_upload(tmpdir, output)
-end
-
-desc "update plugins"
-task "plugins:update" do
-  vendor_plugin "http://github.com/heroku/rails_log_stdout.git", "legacy"
-  vendor_plugin "http://github.com/pedro/rails3_serve_static_assets.git"
-  vendor_plugin "http://github.com/hone/rails31_enable_runtime_asset_compilation.git"
 end
 
 desc "install vendored gem"

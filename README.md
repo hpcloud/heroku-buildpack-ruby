@@ -56,20 +56,11 @@ Example Usage:
     -----> Installing dependencies using Bundler version 1.1.rc
     ...
     -----> Writing config/database.yml to read from DATABASE_URL
-    -----> Rails plugin injection
-           Injecting rails_log_stdout
     -----> Discovering process types
            Procfile declares types      -> (none)
            Default types for Ruby/Rails -> console, rake, web, worker
 
 The buildpack will detect your app as a Rails 2 app if it has a `environment.rb` file in the `config`  directory.
-
-#### Rails Log STDOUT
-  A [rails_log_stdout](http://github.com/ddollar/rails_log_stdout) is installed by default so Rails' logger will log to STDOUT and picked up by Heroku's [logplex](http://github.com/heroku/logplex).
-
-#### Auto Injecting Plugins
-
-Any vendored plugin can be stopped from being installed by creating the directory it's installed to in the slug. For instance, to prevent rails_log_stdout plugin from being injected, add `vendor/plugins/rails_log_stdout/.gitkeep` to your git repo.
 
 ### Rails 3
 
@@ -92,9 +83,6 @@ Example Usage:
     -----> Writing config/database.yml to read from DATABASE_URL
     -----> Preparing app for Rails asset pipeline
            Running: rake assets:precompile
-    -----> Rails plugin injection
-           Injecting rails_log_stdout
-           Injecting rails3_serve_static_assets
     -----> Discovering process types
            Procfile declares types      -> web
            Default types for Ruby/Rails -> console, rake, worker
@@ -110,7 +98,7 @@ Hacking
 
 To use this buildpack, fork it on Github.  Push up changes to your fork, then create a test app with `--buildpack <your-github-url>` and push to it.
 
-To change the vendored binaries for Bundler, [Node.js](http://github.com/joyent/node), and rails plugins, use the rake tasks provided by the `Rakefile`. You'll need an S3-enabled AWS account and a bucket to store your binaries in as well as the [vulcan](http://github.com/ddollar/vulcan) gem to build the binaries on heroku.
+To change the vendored binaries for Bundler and [Node.js](http://github.com/joyent/node), use the rake tasks provided by the `Rakefile`. You'll need an S3-enabled AWS account and a bucket to store your binaries in as well as the [vulcan](http://github.com/ddollar/vulcan) gem to build the binaries on heroku.
 
 For example, you can change the vendored version of Bundler to 1.1.rc.
 
@@ -132,7 +120,7 @@ Commit and push the changes to your buildpack to your Github fork, then push you
 
     -----> Installing dependencies using Bundler version 1.1.rc
 
-NOTE: You'll need to vendor the plugins, node, Bundler, and libyaml by running the rake tasks for the buildpack to work properly.
+NOTE: You'll need to vendor the node, Bundler, and libyaml by running the rake tasks for the buildpack to work properly.
 
 Flow
 ----
@@ -155,12 +143,8 @@ Rails 2 (config/environment.rb is detected)
 
 * everything from Rack
 * sets RAILS_ENV=production
-* install rails 2 plugins
-  * [rails_log_stdout](http://github.com/ddollar/rails_log_stdout)
 
 Rails 3 (config/application.rb is detected)
 
 * everything from Rails 2
-* install rails 3 plugins
-  * [rails3_server_static_assets](https://github.com/pedro/rails3_serve_static_assets)
 

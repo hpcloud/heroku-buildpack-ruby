@@ -34,42 +34,7 @@ class LanguagePack::Rails2 < LanguagePack::Ruby
     })
   end
 
-  def compile
-    super
-    install_plugins
-  end
-
 private
-
-  # list of plugins to be installed
-  # @return [Array] resulting list in a String Array
-  def plugins
-    %w( rails_log_stdout )
-  end
-
-  # the root path of where the plugins are to be installed from
-  # @return [String] the resulting path
-  def plugin_root
-    File.expand_path("../../../vendor/plugins", __FILE__)
-  end
-
-  # vendors all the plugins into the slug
-  def install_plugins
-    topic "Rails plugin injection"
-    plugins.each { |plugin| install_plugin(plugin) }
-  end
-
-  # vendors an individual plugin
-  # @param [String] name of the plugin
-  def install_plugin(name)
-    plugin_dir = "vendor/plugins/#{name}"
-    return if File.exist?(plugin_dir)
-    puts "Injecting #{name}"
-    FileUtils.mkdir_p plugin_dir
-    Dir.chdir(plugin_dir) do |dir|
-      run("curl #{VENDOR_URL}/#{name}.tgz -s -o - | tar xzf -")
-    end
-  end
 
   # most rails apps need a database
   # @return [Array] shared database addon
