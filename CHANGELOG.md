@@ -1,3 +1,15 @@
+## v45 (12/14/2012)
+
+Features:
+
+* Stop setting env vars in bin/release now that login-shell is released
+* Enable Invoke Dynamic on JRuby by default
+* GEM_PATH is now updated on each push
+
+## v44 (12/14/2012)
+
+Faulty Release
+
 ## v43 (12/13/2012)
 
 Features:
